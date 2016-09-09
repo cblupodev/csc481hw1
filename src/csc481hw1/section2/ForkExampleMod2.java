@@ -1,12 +1,14 @@
 package csc481hw1.section2;
 
+import java.util.concurrent.Semaphore;
+
 // Demonstrating multithreading and thread synchronization in Java
 public class ForkExampleMod2 implements Runnable {
 
 	int i; // the ID of the thread, so we can control behavior
 	boolean busy; // the flag, Thread 1 will wait until Thread 0 is no longer busy before continuing
 	ForkExampleMod2 other; // reference to the other thread we will synchronize on. This is needed so we can control behavior.
-
+	
 	// create the runnable object
 	public ForkExampleMod2(int i, ForkExampleMod2 other) {
 		this.i = i; // set the thread ID (0 or 1)
@@ -51,6 +53,8 @@ public class ForkExampleMod2 implements Runnable {
 		Thread thread2 = new Thread(t1);
 		thread2.start();
 		
+		
+		// change the ending of the program to the main thread
 		try {
 			thread1.join();
 			thread2.join();
