@@ -7,21 +7,20 @@ public class Client {
 	
 	private Socket socket;
 	
-	public static void main(String[] args) {
-		Client c = new Client();
-		c.run();
+	public Client() {
+		run();
 	}
 	
 	public void run() {
 		try {
 			socket = new Socket(InetAddress.getLocalHost(), Server.PORT);
-			System.out.println(socket.isConnected());
+			System.out.println("is client connected? " + socket.isConnected());
 			PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 		    BufferedReader in = new BufferedReader(
 		        new InputStreamReader(socket.getInputStream()));
 		    out.println(1);
 		    out.println(2);
-		    out.println(-1);
+		    socket.close();
 			/*ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 			oos.flush();
 			System.out.println("at this point both object out streams have been create and flushed before either of the object in streams where created");
