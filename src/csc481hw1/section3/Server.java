@@ -15,12 +15,24 @@ public class Server {
         
         try {
 			serverSocket = new ServerSocket(PORT);
-			socket = new Socket(InetAddress.getLocalHost(), PORT);
-			new Client(socket).start();
-			
-			ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-			oos.flush();
-			ObjectInputStream  ois = new ObjectInputStream(socket.getInputStream());
+			//while (true) {
+				socket = serverSocket.accept();
+				PrintWriter out =
+				        new PrintWriter(socket.getOutputStream(), true);
+				    BufferedReader in = new BufferedReader(
+				        new InputStreamReader(socket.getInputStream()));
+			    String inputLine;
+				while ((inputLine = in.readLine()) != null) {
+					System.out.println(inputLine);
+			        if (Integer.parseInt(inputLine) == -1)
+			            break;
+			    }
+				//socket = new Socket(InetAddress.getLocalHost(), PORT);
+				//new Client(socket).start();
+			//}
+			//ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+			//oos.flush();
+			//ObjectInputStream  ois = new ObjectInputStream(socket.getInputStream());
 			
 		} catch (IOException e) {
 			e.printStackTrace();
