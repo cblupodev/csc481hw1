@@ -6,8 +6,6 @@ import java.util.ArrayList;
 
 public class ServerAccept extends Thread {
 	
-	public static final int PORT = 7856;
-	
 	// TODO create arrays to store input and output streams
 	
 	public void run() {
@@ -15,8 +13,9 @@ public class ServerAccept extends Thread {
         Socket client = null;
         
         try {
-			serverSocket = new ServerSocket(PORT);
+			serverSocket = new ServerSocket(7834);
 			while (true) {
+				System.out.println("serving waiting to connect");
 				client = serverSocket.accept();
 			    BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			    PrintWriter out = new PrintWriter(new OutputStreamWriter(client.getOutputStream()));

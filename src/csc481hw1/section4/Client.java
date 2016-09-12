@@ -5,22 +5,36 @@ import java.net.*;
 
 public class Client {
 	
-	public int id; // so i know what client im talking to, mostly for debugging
-	
-	public Client(int id) {
-		this.id = id;
-		run();
-	}
-	
 	public void run() {
 		try {
-			Socket socket = new Socket(InetAddress.getLocalHost(), ServerAccept.PORT);
+			Socket socket = new Socket("127.0.0.1", 7834);
 			PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-		    BufferedReader in = new BufferedReader(
-		        new InputStreamReader(socket.getInputStream()));
-		    out.printf("im client %d\n", id);
+		    BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		    out.printf("im the client here\n");
+		    
+		    int timeout = 1;
+
+			while (true) { // never stop looking
+				if (timeout++ == 5) break;
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+				String line;
+				try {
+					System.out.println();
+					while (in.ready()) { // loop until read everything from the client stream
+						System.out.printf("this was your message:   %s\n", in.readLine());
+						out.flush();
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		    /*synchronized (Server.waitObject) {
-				Server.waitObject.notify(); // call this immediatley after something was written
+		    	System.out.println("notified");
+				Server.waitObject.notifyAll(); // call this immediatley after something was written
 			}*/
 			/*ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 			oos.flush();
@@ -38,4 +52,8 @@ public class Client {
 		}
 	}
 	
+	public static void main(String[] args) {
+		Client c = new Client();
+		c.run();
+	}
 }
