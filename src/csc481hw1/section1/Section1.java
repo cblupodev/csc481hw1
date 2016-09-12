@@ -4,50 +4,70 @@ import processing.core.PApplet;
 
 public class Section1 extends PApplet {
 	
-	private int windowWidth = 600;
-	private int windowHeight = 400;
+	private int windowWidth = 600; // window frame width
+	private int windowHeight = 400; // window frame height
 	
-	private float[] agent = {windowWidth * .1f, windowHeight*.9f - 50, 25, 50};
-	private float agentOriginalY = agent[1];
-	private float agentOriginalX = agent[0];
-	private float[] foundation = {0, windowHeight*.9f, windowWidth, windowHeight*.1f};
-
-	private float[] topBoundary = {0, 0, windowWidth, 0};
-	private float[] leftBoundary = {0, 0, 0, windowHeight};
-	private float[] rightBoundary = {windowWidth, 0, windowWidth, windowHeight};		
+	// agent is the movable rectangle 
+	private float[] agent; // store the agents size and position, in the format of rect()
+	private float agentOriginalY; // store the original x position
+	private float agentOriginalX; // store the original y position
 	
-	boolean jumping = false;
-	float jumpingAngle = 180;
+	// foundation is the bottom rectangle forming the floor
+	private float[] foundation; // store the agents size and position, in the format of rect()
 
+	// define lines that overlap the window frame, used for collision detection
+	// store the lines in the form of line()
+	private float[] topBoundary;
+	private float[] leftBoundary;
+	private float[] rightBoundary;		
+	
+	boolean jumping; // is the agent jumping?
+	float jumpingAngle; // what angle to use in the cosine funtion used to jump
+
+	// star the program
 	public static void main(String[] args) {
 		PApplet.main("csc481hw1.Section1");
 	}
 	
 	public void settings() {
-		size(windowWidth, windowHeight);
+		size(windowWidth, windowHeight); // set the window demensions
 	}
 	
 	public void setup() {
+		windowWidth = 600;
+		windowHeight = 400;
+		
+		agent = new float[] {windowWidth * .1f, windowHeight*.9f - 50, 25, 50};
+		agentOriginalY = agent[1];
+		agentOriginalX = agent[0];
+		
+		foundation = new float[] {0, windowHeight*.9f, windowWidth, windowHeight*.1f};
+
+		topBoundary = new float[] {0, 0, windowWidth, 0};
+		leftBoundary = new float[] {0, 0, 0, windowHeight};
+		rightBoundary = new float[] {windowWidth, 0, windowWidth, windowHeight};
 		fill(120,50,240);
 	}
 	
+	// wrapper to easily call rect() from just passing an array
 	public void drawRect(float[] rect) {
 		rect(rect[0], rect[1], rect[2], rect[3]);
 	}
-	
+	// wrapper to easily call line() from just passing an array	
 	public void drawLine(float[] line) {
 		line(line[0], line[1], line[2], line[3]);
 	}
-	
+	// wrapper to easily call fill() from just passing an array	
 	public void drawFill(int[] rgb) {
 		fill(rgb[0], rgb[1], rgb[2]);
 	}
-	
+	// wrapper to easily call stroke() from just passing an array	
 	public void drawStroke(int[] rgb) {
 		stroke(rgb[0], rgb[1], rgb[2]);
 	}
 	
 	
+	// collision detection between two lines
 	// copied from https://github.com/jeffThompson/CollisionDetection
 	// LINE/LINE
 	boolean lineLine(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) {
@@ -71,6 +91,7 @@ public class Section1 extends PApplet {
 	  return false;
 	}
 	
+	// collision detection between a line and rectangle
 	// copied from https://github.com/jeffThompson/CollisionDetection
 	// LINE/RECTANGLE
 	boolean lineRect(float x1, float y1, float x2, float y2, float rx, float ry, float rw, float rh) {
@@ -91,17 +112,20 @@ public class Section1 extends PApplet {
 	}
 	
 	public void draw() {
-		background(0);
+		background(0); // reset the background each frame
 		drawFill(new int[] {221,221,221}); // light gray
 		drawRect(foundation);
 		drawFill(new int[] {255,255,255}); // white
 		drawRect(agent);
 		
+		// redraw the agent if it's in the process of jumping
 		if (jumping) {
+			
+			// used that colliding circles example from processing.org
 			float newY = windowHeight*.9f - 50 + (200 * sin(radians(jumpingAngle)));
-			agent[1] = newY;
-			jumpingAngle += 1;
-			if (jumpingAngle == 360) {
+			agent[1] = newY; // set a new y position
+			jumpingAngle += 1; // increment the jumping angle
+			if (jumpingAngle == 360) { // stop jumping if reached the ground
 				jumping  = false;
 				jumpingAngle = 180;
 				agent[1] =agentOriginalY;
@@ -109,24 +133,23 @@ public class Section1 extends PApplet {
 		}
 		
 		
-		if (keyPressed) {
+		if (keyPressed) { // move the agent if the key is pressed
 			if (keyCode == LEFT) {
-				agent[0] -= 5;
+				agent[0] -= 5; // move the x position left
 			}
 			if (keyCode == RIGHT) {
-				agent[0] += 5;
+				agent[0] += 5; // move the x position right
 			}
-			if (key == ' ') {
+			if (key == ' ') { // begin jumping
 				if (jumping == false) {
 					jumping = true;
 				}
 			}
 			
-			System.out.println(lineRect(
-				     leftBoundary[0], leftBoundary[1], leftBoundary[2], leftBoundary[3], 
-				     agent[0], agent[1], agent[2], agent[3]
-				    ));
 		}
+		
+		// check if the agent has collided with the boundaries
+		// if it has then reset to its original position
 		if (lineRect(
 			     leftBoundary[0], leftBoundary[1], leftBoundary[2], leftBoundary[3], 
 			     agent[0], agent[1], agent[2], agent[3]
@@ -140,7 +163,6 @@ public class Section1 extends PApplet {
 			jumping = false;
 			agent[0] = agentOriginalX;
 			agent[1] = agentOriginalY;
-			
 	  }
 	}
 
