@@ -1,3 +1,5 @@
+// use semaphores instead of monitors
+
 package csc481hw1.section2;
 
 import java.util.concurrent.Semaphore;
@@ -8,7 +10,7 @@ public class ForkExampleMod3 implements Runnable {
 	int i; // the ID of the thread, so we can control behavior
 	boolean busy; // the flag, Thread 1 will wait until Thread 0 is no longer busy before continuing
 	ForkExampleMod3 other; // reference to the other thread we will synchronize on. This is needed so we can control behavior.
-	public static Semaphore sem = new Semaphore(0);
+	public static Semaphore sem = new Semaphore(0); // the semaphore
 
 	// create the runnable object
 	public ForkExampleMod3(int i, ForkExampleMod3 other) {
@@ -25,10 +27,10 @@ public class ForkExampleMod3 implements Runnable {
 		if(i==0) { // 1st thread, sleep for a while, then notify threads waiting
 			try {
 				Thread.sleep(4000); // What happens if you put this sleep inside the synchronized block?
-				sem.release();
+				sem.release(); // release the sem to allow the other thread to run
 				Thread.sleep(4000); // What happens if you put this sleep inside the synchronized block?
 					busy = false; // must synchronize while editing the flag
-				sem.release();
+				sem.release(); // release the sem to allow the other thread to run
 			}
 			catch(InterruptedException tie) { tie.printStackTrace(); }
 		}
@@ -36,7 +38,7 @@ public class ForkExampleMod3 implements Runnable {
 			try {
 				while (other.isBusy()) {
 					System.out.println("Waiting!");
-					sem.acquire();
+					sem.acquire(); // block until the sem is released
 				}
 				System.out.println("Finished!");
 			} catch (InterruptedException e) {

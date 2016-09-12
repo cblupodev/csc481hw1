@@ -1,3 +1,5 @@
+// example to join with the main thread to terminate
+
 package csc481hw1.section2;
 
 import java.util.concurrent.Semaphore;
@@ -56,6 +58,7 @@ public class ForkExampleMod2 implements Runnable {
 		
 		// change the ending of the program to the main thread
 		try {
+			// wait for both threads to close
 			thread1.join();
 			thread2.join();
 			System.out.println("Finished!");
