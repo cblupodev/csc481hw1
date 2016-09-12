@@ -1,4 +1,4 @@
-package csc481hw1;
+package csc481hw1.section1;
 
 import processing.core.PApplet;
 
