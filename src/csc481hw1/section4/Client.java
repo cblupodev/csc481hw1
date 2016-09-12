@@ -15,11 +15,12 @@ public class Client {
 			
 			oos.writeInt(1); // write a simple message to server
 			oos.flush();
+			oos.writeInt(2); // write a simple message to server
+			oos.flush();
 			
 			int timeout = 1;
 			
 			while (true) {
-				
 				Thread.sleep(1000);
 				if (timeout++ == 5) break; // if haven't read anything new from the server for a certain amount of time then quit
 				System.out.println();

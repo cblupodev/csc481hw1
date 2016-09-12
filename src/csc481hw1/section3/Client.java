@@ -21,15 +21,6 @@ public class Client {
 		    out.println(1);
 		    out.println(2);
 		    socket.close();
-			/*ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-			oos.flush();
-			System.out.println("at this point both object out streams have been create and flushed before either of the object in streams where created");
-			Thread.sleep(3000);
-			ObjectInputStream  ois = new ObjectInputStream(socket.getInputStream());
-			System.out.println("object in stream created on client");
-			oos.write(25);
-			oos.write(78);
-			oos.write(-1);*/
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

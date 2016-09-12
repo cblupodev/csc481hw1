@@ -8,8 +8,6 @@ public class Server extends Thread {
 	
 	public static final int PORT = 6789;
 	
-	// TODO create arrays to store input and output streams
-	
 	public void run() {
         ServerSocket serverSocket = null;
         Socket client = null;
@@ -17,8 +15,8 @@ public class Server extends Thread {
         try {
 			serverSocket = new ServerSocket(PORT);
 			System.out.println("server started");
-			//while (true) {
-				client = serverSocket.accept();
+				// wait for all the clients to connect before continuing 
+				client = serverSocket.accept(); // accept the first client connection
 			    BufferedReader in1 = new BufferedReader(new InputStreamReader(client.getInputStream()));
 				client = serverSocket.accept();
 			    BufferedReader in2 = new BufferedReader(new InputStreamReader(client.getInputStream()));
@@ -26,9 +24,11 @@ public class Server extends Thread {
 			    BufferedReader in3 = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			    System.out.println("all the client buffers are in");
 			    
+			    
+			    // try and read from each client
 				String inline;
 				System.out.println("in1:");
-				while ((inline = in1.readLine()) != null) {
+				while ((inline = in1.readLine()) != null) { // continue to read if haven't read all the lines
 					System.out.println(inline);
 				}
 				
@@ -41,15 +41,6 @@ public class Server extends Thread {
 				while ((inline = in3.readLine()) != null) {
 					System.out.println(inline);
 				}
-				/*while ((inputLine = in.readLine()) != null) {
-					System.out.println(inputLine);
-			        if (Integer.parseInt(inputLine) == -1)
-			            break;
-			    }*/
-			//}
-			/*ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-			oos.flush();
-			ObjectInputStream  ois = new ObjectInputStream(socket.getInputStream());*/
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -58,8 +49,4 @@ public class Server extends Thread {
 		}
 		
 	}
-	
-	public static void main (String args[]) {
-	}
-
 }

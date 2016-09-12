@@ -21,7 +21,7 @@ public class ServerAccept extends Thread {
 				System.out.println("a client was connected");
 				
 				ObjectOutputStream oos = new ObjectOutputStream(client.getOutputStream());
-				oos.flush(); // stackover said just do it
+				oos.flush(); // stackoverflow said just do it
 				ObjectInputStream  ois = new ObjectInputStream(client.getInputStream());
 			    
 				// pass the object streams to the server
