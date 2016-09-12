@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 
+// Class to receive incoming connections. break into a new thread because accept() is blocking
 public class ServerAccept extends Thread {
 	
 	// TODO create arrays to store input and output streams
@@ -14,24 +15,21 @@ public class ServerAccept extends Thread {
         
         try {
 			serverSocket = new ServerSocket(7834);
-			while (true) {
-				System.out.println("serving waiting to connect");
+			while (true) { // never stop listening
+				System.out.println("server waiting to connect");
 				client = serverSocket.accept();
-			    BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-			    PrintWriter out = new PrintWriter(new OutputStreamWriter(client.getOutputStream()));
-			    Server.inStream.add(in);
-			    Server.outStream.add(out);
+				System.out.println("a client was connected");
+				
+				ObjectOutputStream oos = new ObjectOutputStream(client.getOutputStream());
+				oos.flush(); // stackover said just do it
+				ObjectInputStream  ois = new ObjectInputStream(client.getInputStream());
+			    
+				// pass the object streams to the server
+				Server.inStream.add(ois); 
+			    Server.outStream.add(oos);
 			}
-			/*ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-			oos.flush();
-			ObjectInputStream  ois = new ObjectInputStream(socket.getInputStream());*/
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public static void main (String args[]) {
-	}
-
 }

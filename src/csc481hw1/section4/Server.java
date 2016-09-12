@@ -6,8 +6,8 @@ import java.util.concurrent.*;
 
 public class Server {
 	
-	public static CopyOnWriteArrayList<BufferedReader> inStream = new CopyOnWriteArrayList<>();
-	public static CopyOnWriteArrayList<PrintWriter> outStream = new CopyOnWriteArrayList<>();
+	public static CopyOnWriteArrayList<ObjectInputStream> inStream = new CopyOnWriteArrayList<>();
+	public static CopyOnWriteArrayList<ObjectOutputStream> outStream = new CopyOnWriteArrayList<>();
 	
 	public static void main(String[] args) {
 		Server m = new Server();
@@ -15,38 +15,26 @@ public class Server {
 	}
 	
 	public void run() {
+		
+		// start the thread that accepts incoming connections
 		Thread t = new Thread(new ServerAccept());
 		t.start();
 		
 		// read from clients
 		while (true) { // never stop looking
-				/*synchronized (waitObject) {
-					try {
-						System.out.println("waited");
-						waitObject.wait(); // wait here until at least one client notifies you
-					} catch (InterruptedException e1) {
-						e1.printStackTrace();
+			for (int i = 0; i < inStream.size(); i++) { // iterate over the client streams
+				int read;
+				try {
+					if (inStream.get(i).available() != 0) { // check if there is anything to read
+						read = inStream.get(i).readInt(); // read a simple message from a client
+						System.out.println("message from client:   " + read);
+						outStream.get(i).writeInt(read); // write a message to a client
+						outStream.get(i).flush(); // make sure every message gets sent out immediately
 					}
-				}*/
-				for (int i = 0; i < inStream.size(); i++) { // iterate over the clients
-					String line;
-					try {
-						while (inStream.get(i).ready()) { // loop until read everything from the client stream
-							line = inStream.get(i).readLine();
-							System.out.println("message from client:   " + line);
-							outStream.get(i).println(line);
-							outStream.get(i).flush();
-						}
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
+			}
 		}
-		
-		/*Random rand = new Random();
-		int rannum = rand.nextInt(10) + 1;
-		for (int i = 0; i < rannum; i++) {
-			Client c = new Client(i);
-		}*/
 	}
 }
