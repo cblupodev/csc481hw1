@@ -26,7 +26,7 @@ public class Section1 extends PApplet {
 
 	// star the program
 	public static void main(String[] args) {
-		PApplet.main("csc481hw1.Section1");
+		PApplet.main("csc481hw1.section1.Section1");
 	}
 	
 	public void settings() {
@@ -46,6 +46,8 @@ public class Section1 extends PApplet {
 		topBoundary = new float[] {0, 0, windowWidth, 0};
 		leftBoundary = new float[] {0, 0, 0, windowHeight};
 		rightBoundary = new float[] {windowWidth, 0, windowWidth, windowHeight};
+		
+		jumpingAngle = 180;
 		fill(120,50,240);
 	}
 	

@@ -9,14 +9,16 @@ public class ForkExampleMod1 extends Thread {
 	
 	public static ConcurrentLinkedQueue<Integer> q = new ConcurrentLinkedQueue<>(); // create a thread safe message queue
 	private ForkExampleMod1 writerref; // allow the reader to reference the writer so it can wait on it
+	private String name;
 	
-	public ForkExampleMod1 (ForkExampleMod1 writerref) {
+	public ForkExampleMod1 (ForkExampleMod1 writerref, String name) {
 		this.writerref = writerref;
+		this.name = name;
 	}
 
 	// run method needed by runnable interface
 	public void run() {
-		if (this.getName().equals("writer")) { // enter this block of the thread is a writer
+		if (this.name.equals("writer")) { // enter this block of the thread is a writer
 			try {
 				synchronized (this) { q.add(1); } // add message to the queue
 				Thread.sleep(1000); // wait a second
@@ -34,7 +36,7 @@ public class ForkExampleMod1 extends Thread {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-		} else if (this.getName().equals("reader")) { // enter this block of the thread is a reader
+		} else if (this.name.equals("reader")) { // enter this block of the thread is a reader
 			while (true) {
 				synchronized (this.writerref) {
 					if (q.isEmpty()) { // wait if the queue is empty
@@ -57,10 +59,10 @@ public class ForkExampleMod1 extends Thread {
 	}
 
 	public static void main(String[] args) {
-		ForkExampleMod1 writer = new ForkExampleMod1(null);
-		ForkExampleMod1 reader = new ForkExampleMod1(writer);
-		(new Thread(writer, "writer")).start();
-		(new Thread(reader, "reader")).start();
+		ForkExampleMod1 writer = new ForkExampleMod1(null, "writer");
+		ForkExampleMod1 reader = new ForkExampleMod1(writer, "reader");
+		(new Thread(writer)).start();
+		(new Thread(reader)).start();
 	}
 
 }
