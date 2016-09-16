@@ -2,12 +2,20 @@ package csc481hw1.section4;
 
 import java.io.*;
 import java.net.*;
+import java.util.Arrays;
 
 public class Client {
 	
+	private String address;
+
+	public Client(String address) {
+		this.address = address;
+		// TODO Auto-generated constructor stub
+	}
+
 	public void run() {
 		try {
-			Socket socket = new Socket("127.0.0.1", 7834);
+			Socket socket = new Socket(address, 7834);
 			
 			ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 			oos.flush();
@@ -46,7 +54,8 @@ public class Client {
 	}
 	
 	public static void main(String[] args) {
-		Client c = new Client();
+		System.out.println(Arrays.toString(args));
+		Client c = new Client(args[0]);
 		c.run();
 	}
 }

@@ -19,4 +19,4 @@ Import the csc481hw1 folder in Eclipse
 - Run the Server.java file as a java application
 - Compile and run Client.java 
     javac Client.java && java Client
-- output should be printed to the eclipse console and each terminal window
+- Output should be printed to the eclipse console and each terminal window
