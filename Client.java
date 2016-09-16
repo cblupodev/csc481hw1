@@ -1,4 +1,3 @@
-package csc481hw1.section3;
 
 import java.io.*;
 import java.net.*;
@@ -19,6 +18,7 @@ public class Client {
 	public void run() {
 		try {
 			socket = new Socket(address, 6789);
+			System.out.println("is client connected? " + socket.isConnected());
 			PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 		    BufferedReader in = new BufferedReader(
 		        new InputStreamReader(socket.getInputStream()));

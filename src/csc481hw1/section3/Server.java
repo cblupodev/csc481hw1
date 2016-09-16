@@ -4,16 +4,14 @@ import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 
-public class Server extends Thread {
-	
-	public static final int PORT = 6789;
+public class Server {
 	
 	public void run() {
         ServerSocket serverSocket = null;
         Socket client = null;
         
         try {
-			serverSocket = new ServerSocket(PORT);
+			serverSocket = new ServerSocket(6789);
 			System.out.println("server started");
 				// wait for all the clients to connect before continuing 
 				client = serverSocket.accept(); // accept the first client connection
@@ -24,20 +22,19 @@ public class Server extends Thread {
 			    BufferedReader in3 = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			    System.out.println("all the client buffers are in");
 			    
-			    
 			    // try and read from each client
 				String inline;
-				System.out.println("in1:");
+				System.out.println("read from client 1:");
 				while ((inline = in1.readLine()) != null) { // continue to read if haven't read all the lines
 					System.out.println(inline);
 				}
 				
-				System.out.println("in2:");
+				System.out.println("read from client 2:");
 				while ((inline = in2.readLine()) != null) {
 					System.out.println(inline);
 				}
 
-				System.out.println("in3:");
+				System.out.println("read from client 3:");
 				while ((inline = in3.readLine()) != null) {
 					System.out.println(inline);
 				}
@@ -48,5 +45,10 @@ public class Server extends Thread {
 			t.printStackTrace();
 		}
 		
+	}
+	
+	public static void main(String[] args) {
+		Server s = new Server();
+		s.run();
 	}
 }
