@@ -10,7 +10,6 @@ public class Client {
 
 	public Client(String address) {
 		this.address = address;
-		// TODO Auto-generated constructor stub
 	}
 
 	public void run() {

@@ -7,8 +7,6 @@ import java.util.ArrayList;
 // Class to receive incoming connections. break into a new thread because accept() is blocking
 public class ServerAccept extends Thread {
 	
-	// TODO create arrays to store input and output streams
-	
 	public void run() {
         ServerSocket serverSocket = null;
         Socket client = null;

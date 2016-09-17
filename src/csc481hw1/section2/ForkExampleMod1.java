@@ -20,17 +20,17 @@ public class ForkExampleMod1 extends Thread {
 	public void run() {
 		if (this.name.equals("writer")) { // enter this block of the thread is a writer
 			try {
-				synchronized (this) { q.add(1); } // add message to the queue
+				q.add(1); // add message to the queue
 				Thread.sleep(1000); // wait a second
 				synchronized (this) { notifyAll(); } // notify reader thread a new message was added
-				synchronized (this) { q.add(2); }
+				q.add(2);
 				Thread.sleep(1000);
 				synchronized (this) { notifyAll(); }
-				synchronized (this) { q.add(3); }
+				q.add(3);
 				Thread.sleep(1000);
 				synchronized (this) { notifyAll(); }
 
-				synchronized (this) { q.add(-1); } // send a quit message
+				q.add(-1); // send a quit message
 				Thread.sleep(1000);
 				synchronized (this) { notifyAll(); }
 			} catch (InterruptedException e) {

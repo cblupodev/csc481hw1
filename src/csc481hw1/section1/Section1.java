@@ -14,6 +14,9 @@ public class Section1 extends PApplet {
 	
 	// foundation is the bottom rectangle forming the floor
 	private float[] foundation; // store the agents size and position, in the format of rect()
+	
+	// floatLine is the thing floating in the air
+	private float[] floatRect;
 
 	// define lines that overlap the window frame, used for collision detection
 	// store the lines in the form of line()
@@ -42,7 +45,8 @@ public class Section1 extends PApplet {
 		agentOriginalX = agent[0];
 		
 		foundation = new float[] {0, windowHeight*.9f, windowWidth, windowHeight*.1f};
-
+		floatRect = new float[] {windowWidth * .7f, windowHeight*.7f, windowWidth * .2f, windowHeight*.025f};
+		
 		topBoundary = new float[] {0, 0, windowWidth, 0};
 		leftBoundary = new float[] {0, 0, 0, windowHeight};
 		rightBoundary = new float[] {windowWidth, 0, windowWidth, windowHeight};
@@ -68,7 +72,6 @@ public class Section1 extends PApplet {
 		stroke(rgb[0], rgb[1], rgb[2]);
 	}
 	
-	
 	// collision detection between two lines
 	// copied from https://github.com/jeffThompson/CollisionDetection
 	// LINE/LINE
@@ -93,6 +96,22 @@ public class Section1 extends PApplet {
 	  return false;
 	}
 	
+	// collision detection between a rectangle and rectangle
+	// copied from https://github.com/jeffThompson/CollisionDetection
+	// RECTANGLE/RECTANGLE
+	boolean rectRect(float r1x, float r1y, float r1w, float r1h, float r2x, float r2y, float r2w, float r2h) {
+	  
+	  // are the sides of one rectangle touching the other?
+	  
+	  if (r1x + r1w >= r2x &&    // r1 right edge past r2 left
+	      r1x <= r2x + r2w &&    // r1 left edge past r2 right
+	      r1y + r1h >= r2y &&    // r1 top edge past r2 bottom
+	      r1y <= r2y + r2h) {    // r1 bottom edge past r2 top
+	        return true;
+	  }
+	  return false;
+	}
+	
 	// collision detection between a line and rectangle
 	// copied from https://github.com/jeffThompson/CollisionDetection
 	// LINE/RECTANGLE
@@ -113,10 +132,23 @@ public class Section1 extends PApplet {
 	  return false;
 	}
 	
+	private boolean lineRectWrap(float[] r1, float[] r2) {
+		return lineRect(r1[0], r1[1], r1[2], r1[3], r2[0], r2[1], r2[2], r2[3]);
+	}
+	
+	private boolean rectRectWrap(float[] r1, float[] r2) {
+		return rectRect(r1[0], r1[1], r1[2], r1[3], r2[0], r2[1], r2[2], r2[3]);
+	}
+	
+	private boolean lineLineWrap(float[] l1, float[] l2) {
+		return lineLine(l1[0], l1[1], l1[2], l1[3], l2[0], l2[1], l2[2], l2[3]);
+	}
+	
 	public void draw() {
 		background(0); // reset the background each frame
 		drawFill(new int[] {221,221,221}); // light gray
 		drawRect(foundation);
+		drawRect(floatRect);
 		drawFill(new int[] {255,255,255}); // white
 		drawRect(agent);
 		
@@ -152,16 +184,8 @@ public class Section1 extends PApplet {
 		
 		// check if the agent has collided with the boundaries
 		// if it has then reset to its original position
-		if (lineRect(
-			     leftBoundary[0], leftBoundary[1], leftBoundary[2], leftBoundary[3], 
-			     agent[0], agent[1], agent[2], agent[3]
-			    )
-		||
-	    lineRect(
-	    		 rightBoundary[0], rightBoundary[1], rightBoundary[2], rightBoundary[3], 
-			     agent[0], agent[1], agent[2], agent[3]
-			    )
-	    ) {
+		if (lineRectWrap(leftBoundary,agent) || lineRectWrap(rightBoundary,agent) ||
+            rectRectWrap(floatRect, agent)) {
 			jumping = false;
 			agent[0] = agentOriginalX;
 			agent[1] = agentOriginalY;
