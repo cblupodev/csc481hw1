@@ -1,3 +1,5 @@
+The subdirectories are in "src\csc481hw1"
+
 Import the csc481hw1 folder in Eclipse
 
 # Section 1
