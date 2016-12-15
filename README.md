@@ -1,3 +1,5 @@
+Link to project description [csc481hw1writeup.pdf - github.com](https://github.com/cblupodev/csc481hw1/blob/master/csc481hw1writeup.pdf)
+
 The subdirectories are in "src\csc481hw1"
 
 Import the csc481hw1 folder in Eclipse
